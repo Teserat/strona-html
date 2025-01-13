@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Proste logowanie i wyszukiwarka</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    #loginSection, #searchSection {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      cursor: pointer;
+    }
+    #loginError {
+      color: red;
+      margin-top: 10px;
+      display: none;
+    }
+    #searchResults {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+
+  <div id="loginSection">
+    <h2>Logowanie</h2>
+    <label for="username">Login:</label>
+    <input type="text" id="username" placeholder="Wpisz login" />
+
+    <label for="password">Hasło:</label>
+    <input type="password" id="password" placeholder="Wpisz hasło" />
+
+    <button onclick="login()">Zaloguj</button>
+    <div id="loginError">Błędne dane logowania!</div>
+  </div>
+
+
+  <div id="searchSection" style="display: none;">
+    <h2>Wyszukiwarka</h2>
+    <label for="searchInput">Nazwa wniosku:</label>
+    <input type="text" id="searchInput" placeholder="np. wniosek123" />
+    <button onclick="search()">Wyszukaj</button>
+    
+    <div id="searchResults"></div>
+  </div>
+
+  <script>
+    function login() {
+      var user = document.getElementById("username").value;
+      var pass = document.getElementById("password").value;
+
+
+      if (user === "lukasz" && pass === "mistrzu") {
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("searchSection").style.display = "block";
+      } else {
+        document.getElementById("loginError").style.display = "block";
+      }
+    }
+
+    function search() {
+      var query = document.getElementById("searchInput").value.trim();
+      var resultsDiv = document.getElementById("searchResults");
+      resultsDiv.innerHTML = ""; // Wyczyść poprzednie wyniki
+
+
+      if (query.toLowerCase() === "wniosek123") {
+        resultsDiv.innerHTML = "Znaleziono: wniosek123";
+      } else {
+        resultsDiv.innerHTML = "Nie znaleziono wyniku.";
+      }
+    }
+  </script>
+</body>
+</html>
