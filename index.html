@@ -508,7 +508,7 @@
     }
     logDebug("PrÃ³ba logowania dla: " + user, "info");
     setTimeout(() => {
-      // Warunki testowe â€“ nie zdradzamy w placeholderach
+      // Warunki testowe â€?nie zdradzamy w placeholderach
       if (user === "lukasz" && pass === "mistrzu") {
         loginError.style.display = "none";
         loginSection.style.display = "none";
@@ -543,7 +543,7 @@
       let filtered = [];
       if (query === "") {
         filtered = wnioski;
-        logDebug("Puste zapytanie â€“ wszystkie rekordy (" + filtered.length + ").", "info");
+        logDebug("Puste zapytanie â€?wszystkie rekordy (" + filtered.length + ").", "info");
       } else {
         const num = parseInt(query.replace(/\D/g, ""), 10);
         if (!isNaN(num)) {
