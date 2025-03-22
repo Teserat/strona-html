@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Strona testowa - Logowanie i Wnioski (UX Poprawki)</title>
+  <title>Strona testowa - Logowanie & wnioski</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -508,7 +508,7 @@
     }
     logDebug("PrÃ³ba logowania dla: " + user, "info");
     setTimeout(() => {
-      // Warunki testowe â€?nie zdradzamy w placeholderach
+      // Warunki testowe ï¿½?nie zdradzamy w placeholderach
       if (user === "lukasz" && pass === "mistrzu") {
         loginError.style.display = "none";
         loginSection.style.display = "none";
@@ -543,7 +543,7 @@
       let filtered = [];
       if (query === "") {
         filtered = wnioski;
-        logDebug("Puste zapytanie â€?wszystkie rekordy (" + filtered.length + ").", "info");
+        logDebug("Puste zapytanie ï¿½?wszystkie rekordy (" + filtered.length + ").", "info");
       } else {
         const num = parseInt(query.replace(/\D/g, ""), 10);
         if (!isNaN(num)) {
