@@ -1,0 +1,11 @@
+
+.vs/                       # katalog z danymi sesji
+.vscode/                   # ustawienia VS Code (jeśli używasz)
+VSWorkspaceState.json      # stan otwartych plików
+slnx.sqlite                # cache rozwiązań
+
+
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
