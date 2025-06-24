@@ -4,640 +4,104 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Strona testowa - Logowanie & wnioski</title>
+
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary-color: #2c3e50;
-      --secondary-color: #2980b9;
-      --success-color: #27ae60;
-      --error-color: #c0392b;
-      --bg-color: #ecf0f1;
-      --card-bg: #fff;
-      --log-bg: #1e1e1e;
-      --log-text: #cccccc;
-      --topbar-bg: #34495e;
-    }
-    body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: var(--bg-color);
-      color: var(--primary-color);
-      overflow-x: hidden; /* zapobiega poziomym paskom przy minimalizacji panelu */
-    }
 
-    /* Top bar - pojawia się po zalogowaniu */
-    #topBar {
-      width: 100%;
-      background: var(--topbar-bg);
-      color: #fff;
-      padding: 10px 20px;
-      display: none; /* widoczny po zalogowaniu */
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      align-items: center;
-      justify-content: space-between;
-    }
-    #topBarContent {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    #userInfo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 500;
-    }
-    #userInfo i {
-      font-size: 18px;
-    }
-    #userName {
-      font-weight: 700;
-    }
-    #userRole {
-      background: #7f8c8d;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    #logoutButtonTopBar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: #e74c3c;
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    #logoutButtonTopBar:hover {
-      background: #c0392b;
-    }
-
-    .main-container {
-      display: flex;
-      flex-direction: row;
-      min-height: 100vh;
-    }
-    .content {
-      flex: 1;
-      padding: 20px;
-    }
-
-    /* Panel logów */
-    #logPanelContainer {
-      width: 320px;
-      min-width: 320px;
-      background: var(--log-bg);
-      color: var(--log-text);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      transition: width 0.3s ease;
-      overflow: hidden;
-    }
-    #logPanelHeader {
-      background: #333;
-      color: #fff;
-      padding: 10px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    #logPanelHeader span {
-      cursor: pointer;
-      padding: 5px 8px;
-      background: #555;
-      border-radius: 4px;
-      transition: background 0.2s;
-    }
-    #logPanelHeader span:hover {
-      background: #777;
-    }
-    #logPanel {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px;
-      font-size: 0.9em;
-      border-top: 1px solid #444;
-    }
-    .log-entry {
-      margin-bottom: 5px;
-      line-height: 1.4;
-      word-wrap: break-word;
-    }
-    .log-error {
-      color: var(--error-color);
-    }
-    .log-success {
-      color: var(--success-color);
-    }
-    .log-info {
-      color: #aaa;
-    }
-
-    /* Sekcja logowania i wyszukiwania */
-    #loginSection, #searchSection {
-      max-width: 600px;
-      margin: 20px auto;
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-    }
-    h2 {
-      margin-top: 0;
-      text-align: center;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-      font-weight: 500;
-    }
-    .input-row {
-      position: relative;
-      margin-top: 10px;
-    }
-    .input-row i {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #999;
-    }
-    input[type="text"], input[type="password"] {
-      width: 100%;
-      padding: 10px 10px 10px 36px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-      outline: none;
-      transition: border-color 0.2s ease;
-    }
-    input[type="text"]:focus, input[type="password"]:focus {
-      border-color: var(--secondary-color);
-    }
-    button {
-      margin-top: 15px;
-      padding: 10px;
-      width: 100%;
-      border: none;
-      border-radius: 4px;
-      background: var(--secondary-color);
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
-    }
-    button:hover {
-      background: #1c6a90;
-      transform: scale(1.02);
-    }
-    .btn-reset {
-      background: #bdc3c7;
-      color: var(--primary-color);
-    }
-    #loginError, #searchError {
-      color: var(--error-color);
-      margin-top: 10px;
-      display: none;
-      font-weight: bold;
-    }
-
-    /* Shake effect */
-    .shake {
-      animation: shake 0.4s;
-    }
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      20% { transform: translateX(-10px); }
-      40% { transform: translateX(10px); }
-      60% { transform: translateX(-10px); }
-      80% { transform: translateX(10px); }
-      100% { transform: translateX(0); }
-    }
-
-    #sortSection {
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    #searchResults {
-      margin-top: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 15px;
-    }
-    .record-box {
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      cursor: pointer;
-    }
-    .record-box:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-    }
-    .record-header {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .record-details {
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-    .record-comment {
-      font-size: 13px;
-      font-style: italic;
-      color: #7f8c8d;
-    }
-    .record-expanded {
-      background: #f9f9f9;
-      padding: 10px;
-      border-top: 1px dashed #ccc;
-      margin-top: 10px;
-      font-size: 13px;
-    }
-    #resultsCount {
-      margin-top: 10px;
-      font-weight: 500;
-    }
-
-    @media (max-width: 768px) {
-      .main-container {
-        flex-direction: column;
-      }
-      #logPanelContainer {
-        width: 100%;
-        min-width: 100%;
-        height: 200px;
-        order: 2;
-      }
-      .content {
-        order: 1;
-      }
-      #topBar {
-        position: relative;
-      }
-    }
-  </style>
+  <!-- Zewnętrzny arkusz stylów -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- Górny pasek (top bar) - pojawia się po zalogowaniu -->
-<div id="topBar" style="display:none;">
-  <div id="topBarContent">
-    <div id="userInfo">
-      <i id="userIcon">👤</i>
-      <span id="userName"></span>
-      <span id="userRole">UŻYTKOWNIK</span>
+  <!-- Górny pasek (top bar) - pojawia się po zalogowaniu -->
+  <div id="topBar" style="display:none;">
+    <div id="topBarContent">
+      <div id="userInfo">
+        <i id="userIcon">👤</i>
+        <span id="userName"></span>
+        <span id="userRole">UŻYTKOWNIK</span>
+      </div>
+      <button id="logoutButtonTopBar">
+        <span id="logoutIcon">🚪</span>
+        Wyloguj
+      </button>
     </div>
-    <button id="logoutButtonTopBar">
-      <span id="logoutIcon">🚪</span> 
-      Wyloguj
-    </button>
   </div>
-</div>
 
-<div class="main-container">
-  <div class="content">
-    <!-- Sekcja logowania -->
-    <div id="loginSection" data-test="login-section">
-      <h2>Logowanie</h2>
-      <div id="loginForm">
-        <label for="username">Login:</label>
+  <div class="main-container">
+    <div class="content">
+      <!-- Sekcja logowania -->
+      <div id="loginSection" data-test="login-section">
+        <h2>Logowanie</h2>
+        <div id="loginForm">
+          <label for="username">Login:</label>
+          <div class="input-row">
+            <i class="fa fa-user"></i>
+            <input
+              type="text"
+              id="username"
+              placeholder="Wpisz login"
+              data-test="login-username"
+              autocomplete="off"
+            />
+          </div>
+          <label for="password">Hasło:</label>
+          <div class="input-row">
+            <i class="fa fa-lock"></i>
+            <input
+              type="password"
+              id="password"
+              placeholder="Wpisz hasło"
+              data-test="login-password"
+              autocomplete="off"
+            />
+          </div>
+          <button id="loginButton" data-test="login-button">Zaloguj</button>
+        </div>
+        <div id="loginError" data-test="login-error">Błędne dane logowania!</div>
+      </div>
+
+      <!-- Sekcja wyszukiwania wniosków -->
+      <div id="searchSection" style="display: none;" data-test="search-section">
+        <h2>Wyszukiwarka wniosków</h2>
+        <label for="searchInput">Numer lub nazwa wniosku:</label>
         <div class="input-row">
-          <i class="fa fa-user"></i>
-          <input 
-            type="text" 
-            id="username" 
-            placeholder="Wpisz login" 
-            data-test="login-username" 
+          <i class="fa fa-search"></i>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Np. 23 lub wniosek 23"
+            data-test="search-input"
             autocomplete="off"
           />
         </div>
-        <label for="password">Hasło:</label>
-        <div class="input-row">
-          <i class="fa fa-lock"></i>
-          <input 
-            type="password" 
-            id="password" 
-            placeholder="Wpisz hasło" 
-            data-test="login-password" 
-            autocomplete="off"
-          />
+        <div id="sortSection">
+          <label for="sortSelect">Sortuj:</label>
+          <select id="sortSelect" data-test="sort-select">
+            <option value="numer">Numer</option>
+            <option value="dataUtworzenia">Data</option>
+            <option value="imie">Imię</option>
+          </select>
         </div>
-        <button id="loginButton" data-test="login-button">Zaloguj</button>
+        <button id="searchButton" data-test="search-button">Wyszukaj</button>
+        <button id="resetButton" class="btn-reset" data-test="reset-button">Reset</button>
+
+        <div id="searchError" data-test="search-error"></div>
+        <div id="resultsCount"></div>
+        <div id="searchResults" data-test="search-results"></div>
       </div>
-      <div id="loginError" data-test="login-error">Błędne dane logowania!</div>
     </div>
 
-    <!-- Sekcja wyszukiwania wniosków -->
-    <div id="searchSection" style="display: none;" data-test="search-section">
-      <h2>Wyszukiwarka wniosków</h2>
-      <label for="searchInput">Numer lub nazwa wniosku:</label>
-      <div class="input-row">
-        <i class="fa fa-search"></i>
-        <input 
-          type="text" 
-          id="searchInput" 
-          placeholder="Np. 23 lub wniosek 23" 
-          data-test="search-input" 
-          autocomplete="off"
-        />
+    <!-- Panel logów po prawej stronie -->
+    <div id="logPanelContainer">
+      <div id="logPanelHeader">
+        <div>Logi (DEBUG)</div>
+        <span id="toggleLogsBtn" title="Zwiń / Rozwiń panel">||</span>
       </div>
-      <div id="sortSection">
-        <label for="sortSelect">Sortuj:</label>
-        <select id="sortSelect" data-test="sort-select">
-          <option value="numer">Numer</option>
-          <option value="dataUtworzenia">Data</option>
-          <option value="imie">Imię</option>
-        </select>
-      </div>
-      <button id="searchButton" data-test="search-button">Wyszukaj</button>
-      <button id="resetButton" class="btn-reset" data-test="reset-button">Reset</button>
-      <!-- WYLOGUJ przeniesiony do top bar -->
-      
-      <div id="searchError" data-test="search-error"></div>
-      <div id="resultsCount"></div>
-      <div id="searchResults" data-test="search-results"></div>
+      <div id="logPanel" data-test="log-panel"></div>
     </div>
   </div>
 
-  <!-- Panel logów po prawej stronie -->
-  <div id="logPanelContainer">
-    <div id="logPanelHeader">
-      <div>Logi (DEBUG)</div>
-      <span id="toggleLogsBtn" title="Zwiń / Rozwiń panel">||</span>
-    </div>
-    <div id="logPanel" data-test="log-panel"></div>
-  </div>
-</div>
-
-<script>
-  // Minimalne pseudo-ikony
-  document.addEventListener("DOMContentLoaded", function() {
-    const userIcons = document.querySelectorAll('.input-row i.fa-user');
-    userIcons.forEach(icon => icon.textContent = '👤');
-    const lockIcons = document.querySelectorAll('.input-row i.fa-lock');
-    lockIcons.forEach(icon => icon.textContent = '🔒');
-    const searchIcons = document.querySelectorAll('.input-row i.fa-search');
-    searchIcons.forEach(icon => icon.textContent = '🔎');
-  });
-
-  const statuses = ["Nowy", "W trakcie", "Zakończony", "Odrzucony", "Oczekuje"];
-  const femaleNames = ["Anna", "Katarzyna", "Joanna", "Agnieszka", "Ewa"];
-  const maleNames   = ["Piotr", "Marek", "Tomasz", "Paweł", "Marcin"];
-  const realNames = [...femaleNames, ...maleNames];
-  const sampleComments = [
-    "Testowy komentarz: wszystko w porządku.",
-    "Komentarz: wymagane dalsze sprawdzenie.",
-    "Rekord wymaga aktualizacji.",
-    "Brak zastrzeżeń.",
-    "Dane weryfikowane."
-  ];
-  const maritalStatus = ["Kawaler/Panna", "Żonaty/Zamężna", "Rozwiedziony/rozwiedziona", "Wdowiec/Wdowa"];
-  const jobs = ["Inżynier", "Lekarz", "Nauczyciel", "Programista", "Kierowca", "Architekt", "Ekonomista"];
-
-  function getRandomDate() {
-    const start = new Date(1960, 0, 1).getTime();
-    const end = new Date(2024, 11, 31).getTime();
-    const date = new Date(start + Math.random() * (end - start));
-    return date.toLocaleDateString();
-  }
-
-  // Generacja 133 wniosków
-  const wnioski = [];
-  for (let i = 1; i <= 133; i++) {
-    const imie = realNames[Math.floor(Math.random() * realNames.length)];
-    const comment = sampleComments[Math.floor(Math.random() * sampleComments.length)];
-    wnioski.push({
-      numer: i,
-      wniosek: "wniosek " + i,
-      imie: imie,
-      status: statuses[(i - 1) % statuses.length],
-      dataUtworzenia: getRandomDate(),
-      komentarz: comment,
-      plec: femaleNames.includes(imie) ? "Kobieta" : "Mężczyzna",
-      wiek: Math.floor(Math.random() * 73) + 18,
-      stanCywilny: maritalStatus[Math.floor(Math.random() * maritalStatus.length)],
-      zawod: jobs[Math.floor(Math.random() * jobs.length)]
-    });
-  }
-
-  const debugMode = true;
-  function logDebug(message, type="info") {
-    if (debugMode) {
-      const logPanel = document.getElementById("logPanel");
-      logPanel.style.display = "block";
-      const entry = document.createElement("div");
-      entry.classList.add("log-entry", "log-" + type);
-      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-      logPanel.appendChild(entry);
-      logPanel.scrollTop = logPanel.scrollHeight;
-      console.log("DEBUG:", message);
-    }
-  }
-
-  function init() {
-    document.getElementById("loginButton").addEventListener("click", login);
-    document.getElementById("username").addEventListener("keydown", e => {
-      if(e.key === "Enter") {
-        document.getElementById("password").focus();
-      }
-    });
-    document.getElementById("password").addEventListener("keydown", e => {
-      if(e.key === "Enter") {
-        login();
-      }
-    });
-    document.getElementById("searchButton").addEventListener("click", search);
-    document.getElementById("resetButton").addEventListener("click", resetSearch);
-    document.getElementById("searchInput").addEventListener("keydown", e => {
-      if(e.key === "Enter") {
-        search();
-      }
-    });
-    document.getElementById("logoutButtonTopBar").addEventListener("click", logout);
-    document.getElementById("toggleLogsBtn").addEventListener("click", toggleLogPanel);
-
-    // Focus na polu login
-    document.getElementById("username").focus();
-  }
-
-  // Zwijanie/rozwijanie panelu logów
-  let logsCollapsed = false;
-  function toggleLogPanel() {
-    const container = document.getElementById("logPanelContainer");
-    logsCollapsed = !logsCollapsed;
-    if (logsCollapsed) {
-      container.style.width = "40px";
-      document.getElementById("logPanel").style.display = "none";
-      document.getElementById("logPanelHeader").style.justifyContent = "center";
-      document.getElementById("toggleLogsBtn").textContent = ">>";
-      logDebug("Panel logów zminimalizowano", "info");
-    } else {
-      container.style.width = "320px";
-      document.getElementById("logPanel").style.display = "block";
-      document.getElementById("logPanelHeader").style.justifyContent = "space-between";
-      document.getElementById("toggleLogsBtn").textContent = "||";
-      logDebug("Panel logów przywrócono", "info");
-    }
-  }
-
-  function login() {
-    const user = document.getElementById("username").value.trim();
-    const pass = document.getElementById("password").value.trim();
-    const loginError = document.getElementById("loginError");
-    const loginSection = document.getElementById("loginSection");
-    if (!user || !pass) {
-      loginError.textContent = "Wpisz login i hasło!";
-      loginError.style.display = "block";
-      loginSection.classList.add("shake");
-      setTimeout(() => loginSection.classList.remove("shake"), 500);
-      logDebug("Nieudane logowanie - puste pola", "error");
-      return;
-    }
-    logDebug("Próba logowania dla: " + user, "info");
-    setTimeout(() => {
-      // Warunki testowe �?nie zdradzamy w placeholderach
-      if (user === "lukasz" && pass === "mistrzu") {
-        loginError.style.display = "none";
-        loginSection.style.display = "none";
-        document.getElementById("searchSection").style.display = "block";
-        // Pokaż top bar
-        document.getElementById("topBar").style.display = "flex";
-        document.getElementById("userName").textContent = user;
-        document.getElementById("userRole").textContent = "ADMIN"; // np. rola
-        document.getElementById("searchInput").focus();
-        logDebug("Logowanie udane.", "success");
-      } else {
-        loginError.textContent = "Błędne dane logowania!";
-        loginError.style.display = "block";
-        loginSection.classList.add("shake");
-        setTimeout(() => loginSection.classList.remove("shake"), 500);
-        logDebug("Logowanie nieudane.", "error");
-      }
-    }, 400);
-  }
-
-  function search() {
-    const query = document.getElementById("searchInput").value.trim().toLowerCase();
-    const resultsDiv = document.getElementById("searchResults");
-    const searchError = document.getElementById("searchError");
-    const resultsCount = document.getElementById("resultsCount");
-    resultsDiv.innerHTML = "";
-    searchError.style.display = "none";
-    resultsCount.textContent = "";
-    logDebug("Wyszukiwanie: '" + query + "'", "info");
-
-    setTimeout(() => {
-      let filtered = [];
-      if (query === "") {
-        filtered = wnioski;
-        logDebug("Puste zapytanie �?wszystkie rekordy (" + filtered.length + ").", "info");
-      } else {
-        const num = parseInt(query.replace(/\D/g, ""), 10);
-        if (!isNaN(num)) {
-          filtered = wnioski.filter(item => item.numer === num);
-          logDebug("Wyszukiwano rekord o numerze " + num + ". Znaleziono: " + filtered.length, "info");
-        }
-        if (filtered.length === 0) {
-          // Wyszukiwanie częściowe po nazwie
-          filtered = wnioski.filter(item => item.wniosek.toLowerCase().includes(query));
-          logDebug("Wyszukiwano rekordy zawierające '" + query + "'. Znaleziono: " + filtered.length, "info");
-        }
-      }
-      if (filtered.length === 0) {
-        searchError.textContent = "Nie znaleziono wyniku.";
-        searchError.style.display = "block";
-        logDebug("Brak wyników wyszukiwania.", "error");
-        return;
-      }
-      // Sortowanie
-      const sortCriterion = document.getElementById("sortSelect").value;
-      const sortedRecords = sortRecords(filtered, sortCriterion);
-      sortedRecords.forEach(item => {
-        resultsDiv.appendChild(createRecordElement(item));
-      });
-      resultsCount.textContent = "Znaleziono: " + sortedRecords.length + " rekordów.";
-    }, 300);
-  }
-
-  function sortRecords(records, criterion) {
-    return records.sort((a, b) => {
-      if (criterion === "numer") {
-        return a.numer - b.numer;
-      } else if (criterion === "dataUtworzenia") {
-        return new Date(a.dataUtworzenia) - new Date(b.dataUtworzenia);
-      } else if (criterion === "imie") {
-        return a.imie.localeCompare(b.imie);
-      }
-      return 0;
-    });
-  }
-
-  function createRecordElement(item) {
-    const box = document.createElement("div");
-    box.className = "record-box";
-    box.setAttribute("data-test", "record-" + item.numer);
-    box.innerHTML = `
-      <div class="record-header">${item.wniosek}</div>
-      <div class="record-details"><strong>Imię:</strong> ${item.imie} | <strong>Status:</strong> ${item.status}</div>
-      <div class="record-details"><strong>Data:</strong> ${item.dataUtworzenia}</div>
-      <div class="record-comment">${item.komentarz}</div>
-    `;
-    box.addEventListener("click", () => toggleRecordDetails(box, item));
-    return box;
-  }
-
-  function toggleRecordDetails(box, item) {
-    let details = box.querySelector(".record-expanded");
-    if (details) {
-      details.remove();
-      logDebug("Zwinieto szczegóły rekordu " + item.numer, "info");
-    } else {
-      details = document.createElement("div");
-      details.className = "record-expanded";
-      details.innerHTML = `
-        <div><strong>Płeć:</strong> ${item.plec}</div>
-        <div><strong>Wiek:</strong> ${item.wiek}</div>
-        <div><strong>Stan cywilny:</strong> ${item.stanCywilny}</div>
-        <div><strong>Zawód:</strong> ${item.zawod}</div>
-      `;
-      box.appendChild(details);
-      logDebug("Rozwinięto szczegóły rekordu " + item.numer, "info");
-    }
-  }
-
-  function resetSearch() {
-    document.getElementById("searchInput").value = "";
-    document.getElementById("searchResults").innerHTML = "";
-    document.getElementById("searchError").style.display = "none";
-    document.getElementById("resultsCount").textContent = "";
-    logDebug("Reset wyszukiwania.", "info");
-  }
-
-  function logout() {
-    document.getElementById("searchSection").style.display = "none";
-    document.getElementById("loginSection").style.display = "block";
-    document.getElementById("topBar").style.display = "none";
-    document.getElementById("username").value = "";
-    document.getElementById("password").value = "";
-    resetSearch();
-    document.getElementById("username").focus();
-    logDebug("Wylogowano użytkownika.", "info");
-  }
-
-  document.addEventListener("DOMContentLoaded", init);
-</script>
+  <!-- Zewnętrzny skrypt -->
+  <script src="script.js" defer></script>
 </body>
 </html>
